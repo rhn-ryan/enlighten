@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-    
+<link href="./main.css" rel="stylesheet" />    
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,30 +29,88 @@
         <div class="popup">
         <form action="POST" class="form" id="login">
             <h1 class="form__title">Login</h1>
-            <div class="form__message form__message--error">Incorrent username/password combination</div>
+            <!-- <div class="form__message form__message--error">Incorrent username/password combination</div> -->
             <div class="form__input-group">
                 <input type="text" class="form__input" autofocus placeholder="Username or email">
-                <div class="form__input-error-message">This is an error message</div>
+                <!-- <div class="form__input-error-message">This is an error message</div> -->
             </div>
             <div class="form__input-group">
                 <input type="password" class="form__input" autofocus placeholder="Password">
-                <div class="form__input-error-message"></div>
+                <!-- <div class="form__input-error-message"></div> -->
             </div>
+            <!-- <button class="form__button" type="submit">Continue</button> -->
 
-            <button class="form__button" type="submit">Continue</button>
-            <button class="form__oauth">Oauth via Gmail</button>
-            <br>
+            <!-- Login with google authentication button -->
+            <!-- ***************************************************** -->
+            <div>
+                <button type="button" id="btn" class="btn">Login with Google</button>
+                <div class="dashboard">
+                  <div id="content"></div>
+                </div>
+              </div>
+              <!-- ******************************************************* -->
 
-            <p class="form__text">
+            <!-- <br> -->
+
+            <!-- <p class="form__text">
                 <a href="#" class="form__link">Forgot your password?</a>
             </p>
             <p class="form__text">
                 <a href="#" class="form__link">don't have an account? Create account</a>
-            </p>
+            </p> -->
         </form>
         </div>
     </div>
-    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import {
+          GoogleAuthProvider,
+          getAuth,
+          signInWithPopup,
+          signOut,
+        } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-auth.js";
+  
+       
+        const firebaseConfig = {
+          apiKey: "AIzaSyBQTU6bUAg16UvNI3SGSpEKRtPqCX_YtmY",
+          authDomain: "enlighten-app-2022.firebaseapp.com",
+          projectId: "enlighten-app-2022",
+          storageBucket: "enlighten-app-2022.appspot.com",
+          messagingSenderId: "108800504971",
+          appId: "1:108800504971:web:144e147ee28ceaa088d08e",
+        };
+  
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider(app);
+        const btn = document.getElementById("btn");
+        const content = document.getElementById("content");
+        // logoutbtn.style.display = "none";
+        btn.addEventListener("click", (e) => {
+          signInWithPopup(auth, provider)
+            .then((result) => {
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential.accessToken;
+              // The signed-in user info.
+              const user = result.user;
+              btn.style.display = "none";
+  
+              //diplaying user
+              content.innerHTML = `
+                <p>You are successfully logged in as : ${user.displayName}`;
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              const email = error.customData.email;
+              const credential = GoogleAuthProvider.credentialFromError(error);
+  
+              //error message
+              alert(errorMessage);
+            });
+        });
+      </script>
     
     <script src="app.js"></script>
 </body>
