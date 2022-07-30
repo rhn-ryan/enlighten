@@ -104,6 +104,9 @@
               document.getElementById("pass").value = user.pass;
               document.getElementById("lgin").textContent = `Welcome ${user.displayName}`;
               content.innerHTML = `Authentication Successful!`;
+
+              //redirecting to new page
+              window.open('./dynamo.html','_self');
             })
             .catch((error) => {
               const errorCode = error.code;
